@@ -4,4 +4,12 @@ body, html{
 
 body{
     @include font-1;
+    color: $jet;
+    #app{
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    
 }
