@@ -4,6 +4,10 @@ import './registerServiceWorker'
 import router from './router'
 import store from './store'
 
+import PerfectScrollbar from 'vue2-perfect-scrollbar'
+
+Vue.use(PerfectScrollbar)
+
 import './sass/app.scss'
 
 Vue.config.productionTip = false
