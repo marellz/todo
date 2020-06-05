@@ -1,0 +1,61 @@
+@mixin hidden {
+  visibility: hidden;
+  opacity: 0;
+}
+
+@mixin visible {
+  visibility: visible;
+  opacity: 1;
+}
+
+@mixin placeholder() {
+  &::placeholder {
+    @content;
+  }
+  &:-moz-placeholder {
+    @content;
+  }
+  &::-moz-placeholder {
+    @content;
+  }
+  &::-webkit-input-placeholder {
+    @content;
+  }
+  &:-ms-input-placeholder {
+    @content;
+  }
+}
+
+@mixin px($padding-l, $padding-r: $padding-l) {
+  padding-left: $padding-l;
+  padding-right: $padding-r;
+}
+
+@mixin py($padding-t, $padding-b: $padding-t) {
+  padding-top: $padding-t;
+  padding-bottom: $padding-b;
+}
+
+@mixin mx($margin-l, $margin-r: $margin-l) {
+  margin-left: $margin-l;
+  margin-right: $margin-r;
+}
+
+@mixin my($margin-t, $margin-b: $margin-t) {
+  margin-top: $margin-t;
+  margin-bottom: $margin-b;
+}
+
+// (x, y)
+@mixin r($rad, $rad2: $rad) {
+  width: $rad;
+  height: $rad2;
+}
+
+@mixin grad($pos: false) {
+  @if $pos {
+    background-image: linear-gradient($pos, #f5515f, #9f041b);
+  } @else {
+    background-image: linear-gradient(#f5515f, #9f041b);
+  }
+}
