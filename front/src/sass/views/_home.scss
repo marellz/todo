@@ -1,0 +1,45 @@
+.home {
+    &.page{
+        // margin-top: 50px;
+    }
+    &--title {
+        text-align: center;
+    }
+
+    &--title-wrap {
+        align-items: center;
+        &::before,
+        &::after {
+            content: "";
+            display: block;
+            width: 15vw;
+            height: 1px;
+            background: $x-11;
+        }
+
+        $gap: 15px;
+
+        &::before {
+            margin-left: -$gap;
+        }
+        &::after {
+            margin-right: -$gap;
+        }
+    }
+
+    &--add-list{
+        display: flex;
+        justify-content: center;
+        .icon{
+            display: inline-block;
+            border-radius: 2px;
+            padding: 5px;
+            border: 1px solid $x-11;
+        }
+    }
+
+    &--list{
+        margin-top: 50px;
+        margin-left: 15px;
+    }
+}

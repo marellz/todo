@@ -1,0 +1,9 @@
+.home--item-carousel{
+    .VueCarousel-slide{
+        &:not(:first-child){
+            .home-list-item{
+                margin-left: 1rem;
+            }
+        }
+    }
+}

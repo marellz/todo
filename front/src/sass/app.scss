@@ -2,6 +2,7 @@
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+@import '~vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css';
 
 // Mixins
 @import 'config/mixins';
@@ -13,11 +14,13 @@
 @import 'modules/icons';
 
 // Components
+@import 'components/home-list';
+@import 'components/carousel';
 // ...
 
 
 // Views
-// ...
+@import 'views/home';
 
 // Custom
 @import 'custom/buttons';

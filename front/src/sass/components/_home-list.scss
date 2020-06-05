@@ -1,0 +1,51 @@
+.home-list-item{
+   .card{
+       color: white;
+       border: none;
+       .card-title{
+           margin-bottom: 0;
+       }
+       .card-header{
+           border: none;
+           @include py(2rem)
+       }
+       .list-group{
+           height: 200px;
+           &-item{
+               background :transparent;
+               border: none;
+               position: relative;
+
+               $complete-color: rgba(#fff,.3);
+
+               &:hover{
+                   background: rgba(black,.04);
+               }
+
+               &:after{
+                   position: absolute;
+                   content: '';
+                   display: block;
+                   height: 1px;
+                   width: 0;
+                   right: -1.25rem;
+                   background: $complete-color;
+                   top: 50%;
+                   @include hidden;
+                   transition: all .25s ease;
+                   
+               }
+
+
+               &.complete{
+                   color: $complete-color;
+                   &:after{
+                       width: 100%;
+                       @include visible;
+                   }
+
+               }
+           }
+       }
+   }
+}
