@@ -16,11 +16,13 @@
 // Components
 @import 'components/home-list';
 @import 'components/carousel';
+@import 'components/page';
 // ...
 
 
 // Views
 @import 'views/home';
+@import 'views/list';
 
 // Custom
 @import 'custom/buttons';

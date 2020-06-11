@@ -50,9 +50,16 @@
 
     <div class="home--list">
       <div class="container">
-        <carousel :perPageCustom="[[0,1],[480, 2], [768, 3]]" :paginationEnabled="false" :items="itemSpan" class="home--item-carousel">
+        <carousel
+          :perPageCustom="[[0,1],[480, 2], [768, 3]]"
+          :paginationEnabled="false"
+          :items="itemSpan"
+          class="home--item-carousel"
+        >
           <slide v-for="(item, i) in list" :key="i">
-            <home-list :index="i" :item="item" :tasks="item.tasks" />
+            <router-link :to="{ name:'list', params: {index: i }}">
+              <home-list :index="i" :item="item" :tasks="item.tasks" />
+            </router-link>
           </slide>
         </carousel>
       </div>
@@ -97,9 +104,8 @@ export default {
   methods: {
     newList() {
       this.$store.commit("newList", { name: this.newListForm.name });
-      this.newListForm.active = false,
-      this.newListForm.name = null
-    },
+      (this.newListForm.active = false), (this.newListForm.name = null);
+    }
   }
 };
 </script>

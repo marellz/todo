@@ -1,0 +1,9 @@
+.list{
+    &--page-nav{
+        margin-top: auto;
+    }
+    &--content{
+        flex: 1 1 auto;
+        overflow: auto;
+    }
+}
