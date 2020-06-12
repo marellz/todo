@@ -49,20 +49,31 @@
     </template>
 
     <div class="home--list">
-      <div class="container">
-        <carousel
-          :perPageCustom="[[0,1],[480, 2], [768, 3]]"
-          :paginationEnabled="false"
-          :items="itemSpan"
-          class="home--item-carousel"
-        >
-          <slide v-for="(item, i) in list" :key="i">
-            <router-link :to="{ name:'list', params: {index: i }}">
-              <home-list :index="i" :item="item" :tasks="item.tasks" />
-            </router-link>
-          </slide>
-        </carousel>
-      </div>
+      <template v-if="lists.length">
+        <div class="container">
+          <carousel
+            :perPageCustom="[[0,1],[480, 2], [768, 3]]"
+            :paginationEnabled="false"
+            :items="itemSpan"
+            class="home--item-carousel"
+          >
+            <slide v-for="(item, i) in lists" :key="i">
+              <router-link :to="{ name:'list', params: {index: i }}">
+                <home-list :index="i" :item="item" />
+              </router-link>
+            </slide>
+          </carousel>
+        </div>
+      </template>
+      <template v-else>
+        <div class="container">
+          <div class="d-flex flex-column align-items-center">
+          <h3>No Lists currently.</h3>
+          <p class="text-cultured">Add one</p>
+
+          </div>
+        </div>
+      </template>
     </div>
 
     <!-- navigation -->
@@ -97,15 +108,18 @@ export default {
     };
   },
   computed: {
-    list() {
+    lists() {
       return this.$store.getters.lists;
     }
   },
   methods: {
     newList() {
-      this.$store.commit("newList", { name: this.newListForm.name });
+      this.$store.dispatch("newList", { title: this.newListForm.name });
       (this.newListForm.active = false), (this.newListForm.name = null);
     }
+  },
+  mounted() {
+    this.$store.dispatch("getLists");
   }
 };
 </script>
