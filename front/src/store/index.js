@@ -1,59 +1,46 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-
+import axios from 'axios'
 Vue.use(Vuex)
+
+const endPoint = 'http://localhost:8000/api'
 
 export default new Vuex.Store({
   state: {
-    lists: [
-      {
-        title: "Trip to Paris",
-        bg: '#3A2B85ff',
-        tasks: [
-          { name: "Pack bags", complete:false},
-          { name: "Get VISA", complete: true },
-          { name: "Buy Camera", complete: false},
-          { name: "Book AirBnB", complete: false}
-        ]
-      },
-      {
-        title: "My Tasks",
-        bg: '#E03535ff',
-        tasks: [
-          { name: 'Complete To-Do App', complete:false}
-        ]
-      }
-    ]
+    lists: [ ]
   },
-  getters:{
-    lists(state){
+  getters: {
+    lists(state) {
       return state.lists
     }
   },
   mutations: {
-    toggleComplete(state,payload){
+    fetchLists(state, payload) {
+      state.lists = payload.lists
+    },
+    toggleComplete(state, payload) {
       var task = state.lists[payload.list].tasks[payload.task]
-      if(task.complete && task.complete == true){
-        task.complete =  false
+      if (task.complete && task.complete == true) {
+        task.complete = false
       } else {
         task.complete = true
       }
-      // var complete = typeof task.complete == 'boolean' && task.complete == true
-      // task.complete = !complete      
     },
-    newList(state, payload){
-      state.lists.push(
-        {
-          title: payload.name,
-          bg: '#E03535ff',
-          tasks: [
-          ]
-        }
-      )
+    newList(state, payload) {
+      var task = payload.created
+      task.tasks = []
+      state.lists.push(task)
     }
   },
   actions: {
-
+    async getLists({ commit }) {
+      const response = await axios.get(`${endPoint}/list`)
+      commit('fetchLists', response.data)
+    },
+    async newList({commit},list){
+      const response = await axios.post(`${endPoint}/list/new`,list)
+      commit('newList',response.data)
+    }
   },
   modules: {
   }
