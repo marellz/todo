@@ -11,14 +11,14 @@ class TodoListController extends Controller
     //
     public function index()
     {
-        $tasks = TodoList::all();
-        return response()->json(['tasks' => $tasks]);
+        $lists = TodoList::all();
+        return response()->json(['lists' => $lists]);
     }
 
     public function show($id)
     {
-        $task = TodoList::find($id);
-        return response()->json(['task' => $task]);
+        $list = TodoList::find($id);
+        return response()->json(['list' => $list]);
     }
 
     public function store(Request $request)
