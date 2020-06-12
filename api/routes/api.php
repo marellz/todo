@@ -3,17 +3,21 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
+Route::prefix('list')->group(function(){
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+    Route::get('/','TodoListController@index');
+    Route::get('/show/{id}','TodoListController@show');
+    Route::post('/new','TodoListController@store');
+    Route::post('/update/{id}','TodoListController@update');
+    Route::get('/delete/{id}','TodoListController@delete');
+
+});
+
+
+Route::prefix('task')->group(function(){
+
+    Route::post('/new','TaskController@store');
+    Route::post('/update/{id}','TaskController@update');
+    Route::get('/delete/{id}','TaskController@delete');
+
 });
