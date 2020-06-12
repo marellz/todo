@@ -4,7 +4,7 @@
       <div class="card-header">
         <h5 class="card-title">{{item.title}}</h5>
       </div>
-      <template v-if="item.tasks.length">
+      <template v-if="hasTasks">
         <ul class="list-group list-group-flush">
           <perfect-scrollbar class="h-100">
             <li
@@ -26,6 +26,7 @@
   </div>
 </template>
 <script>
+
 export default {
   name: "HomeList",
   props: {
@@ -36,6 +37,11 @@ export default {
     index: {
       type: Number,
       required: true
+    }
+  },
+  computed:{
+    hasTasks(){
+      return this.item.tasks && this.item.tasks.length
     }
   },
   methods: {

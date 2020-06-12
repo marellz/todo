@@ -2,11 +2,15 @@
   <div class="list page">
     <div class="list--title">
       <div class="container py-5">
-        <div class="d-flex flex-column list--title-wrap border pb-4 mb-4">
+        <div class="d-flex flex-column list--title-wrap border-bottom pb-4 mb-4">
           <h1 class="font-weight-light">
             <b>{{list.title}}</b>
           </h1>
-          <h6 class="text-cultured font-weight-semibold">{{completed.length}} of {{tasks.length}} tasks</h6>
+          <h6
+            class="text-cultured font-weight-semibold"
+            v-if="tasks.length"
+          >{{completed.length}} of {{tasks.length}} tasks</h6>
+          <h6 class="text-cultured font-weight-semibold" v-else>No tasks</h6>
         </div>
       </div>
     </div>
@@ -29,13 +33,26 @@
       </div>
     </div>
     <div class="list--page-nav">
-      <div class="container">Nav</div>
+      <div class="container py-3">
+        <div class="d-flex align-items-center">
+          <h5 class="text-cultured">Nav</h5>
+          <div class="ml-auto">
+            <button class="btn btn-danger">
+              <plus-icon />
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 <script>
+import { PlusIcon /*XIcon*/ } from "vue-feather-icons";
 export default {
   name: "List",
+  components: {
+    PlusIcon //, XIcon
+  },
   props: {
     index: {
       required: true
@@ -59,9 +76,7 @@ export default {
     }
   },
   methods: {
-      updateTask(){
-          
-      }
-  },
+    updateTask() {}
+  }
 };
 </script>
