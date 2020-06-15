@@ -1,9 +1,89 @@
-.list{
-    &--page-nav{
+.list {
+    &--page-nav {
         margin-top: auto;
     }
-    &--content{
+    &--content {
         flex: 1 1 auto;
         overflow: auto;
+    }
+
+    // component
+    &--item-title {
+        color: $dark;
+        display: inline-block;
+        position: relative;
+        &:before {
+            height: 1px;
+            width: 0;
+            display: block;
+            left: -30px;
+            content: "";
+            position: absolute;
+            background: $x-11;
+            top: .75rem;
+            transition: width .3s ease;
+        }
+    }
+
+    &--item-due {
+        display: block;
+        color: $x-11;
+    }
+
+    &--item {
+        margin-bottom: 1em;
+
+        .form-check {
+            display: flex;
+            padding: 0;
+
+            &-label {
+                display: flex;
+                flex: 1 1 auto;
+                position: relative;
+
+                &:before {
+                    display: block;
+                    content: "";
+                    @include r(0.8rem);
+                    border: 2px solid darken($cultured, 3%);
+                    border-radius: 2px;
+                    @include mx(10px);
+                    margin-top: 0.4rem;
+
+                    transition: all 0.3s ease;
+                    transform: rotateX(0deg);
+                }
+                &:after {
+                    left: 0;
+                    height: 1px;
+                    width: 0%;
+                    margin-top: 0.6rem;
+                    background: $x-11;
+                    position: absolute;
+                    // @include hidden;
+                    transition: all 0.2s ease 0.3s;
+                }
+            }
+
+            &-input {
+                @include r(0.1px);
+                @include hidden;
+            }
+
+            &-input:checked + .form-check-label {
+                &:before {
+                    transform: rotateX(90deg);
+                }
+
+                .list--item-title {
+                    color: $x-11;
+                    transition: all 0.2s ease;
+                    &:before {
+                        width: calc(100% + 30px);
+                    }
+                }
+            }
+        }
     }
 }
