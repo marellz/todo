@@ -1,0 +1,39 @@
+.modal {
+    &--custom {
+        display: flex;
+        @include hidden;
+        transition: all 0.2s ease;
+        .modal {
+            &-backdrop {
+                opacity: 0.5;
+                z-index: 999;
+            }
+
+            &-dialog {
+                z-index: 1000;
+                width: 100%;
+                margin-top: auto;
+                margin-bottom: 1em;
+                transition: all 0.1s ease;
+                transform: translateY(100%);
+            }
+
+            &-header,
+            &-footer {
+                border: none;
+            }
+        }
+    }
+
+    &--custom.active {
+
+        flex: 1 1 auto;
+        @include visible;
+        
+        .modal {
+            &-dialog {
+                transform: translateY(0%);
+            }
+        }
+    }
+}
