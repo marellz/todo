@@ -58,7 +58,7 @@
             class="home--item-carousel"
           >
             <slide v-for="(item, i) in lists" :key="i">
-              <router-link :to="{ name:'list', params: {index: i }}">
+              <router-link :to="{ name:'list', params: {id: item.id }}">
                 <home-list :index="i" :item="item" />
               </router-link>
             </slide>
@@ -90,6 +90,7 @@
 import HomeList from "@/components/HomeList";
 import { Carousel, Slide } from "vue-carousel";
 import { PlusIcon, XIcon } from "vue-feather-icons";
+
 export default {
   name: "Home",
   components: {
