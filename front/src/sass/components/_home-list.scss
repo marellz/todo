@@ -18,7 +18,7 @@
 
                $complete-color: rgba(#fff,.3);
 
-               &:hover{
+               &:hover:not(.no-tasks){
                    background: rgba(black,.04);
                }
 

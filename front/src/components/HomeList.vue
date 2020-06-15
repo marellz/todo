@@ -1,32 +1,28 @@
 <template>
   <div class="home-list-item">
-    <div class="card" :style="`background-color:${item.bg ? item.bg : '#000'}`">
+    <div class="card" :style="`background-color:${item.bg ? item.bg : '#456990'}`">
       <div class="card-header">
         <h5 class="card-title">{{item.title}}</h5>
       </div>
       <template v-if="hasTasks">
         <ul class="list-group list-group-flush">
-          <perfect-scrollbar class="h-100">
-            <li
-              class="list-group-item"
-              @click="toggleComplete(i)"
-              :class="{'complete':task.complete}"
-              v-for="(task, i) in item.tasks"
-              :key="i"
-            >{{task.name}}</li>
-          </perfect-scrollbar>
+          <li
+            class="list-group-item"
+            :class="{'complete':task.complete}"
+            v-for="(task, i) in tasks"
+            :key="i"
+          >{{task.name}}</li>
         </ul>
       </template>
       <template v-else>
         <ul class="list-group list-group-flush">
-          <li class="list-group-item text-center font-italic">No Tasks.</li>
+          <li class="list-group-item text-center font-italic no-tasks">No Tasks.</li>
         </ul>
       </template>
     </div>
   </div>
 </template>
 <script>
-
 export default {
   name: "HomeList",
   props: {
@@ -39,15 +35,18 @@ export default {
       required: true
     }
   },
-  computed:{
-    hasTasks(){
-      return this.item.tasks && this.item.tasks.length
+  computed: {
+    hasTasks() {
+      return this.item.tasks && this.item.tasks.length;
+    },
+    tasks(){
+      return this.hasTasks ? this.item.tasks.filter((task,index)=>{
+        return index <= 3
+      }) : []
     }
   },
   methods: {
-    toggleComplete(i) {
-      this.$store.commit("toggleComplete", { list: this.index, task: i });
-    }
+    
   }
 };
 </script>

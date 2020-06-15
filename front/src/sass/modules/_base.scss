@@ -8,6 +8,10 @@ body{
     #app, main{
         display: flex;
         flex-direction: column;
+        flex: 1 1 auto;
+    }
+    
+    #app{
         height: 100%;
     }
 

@@ -146,6 +146,9 @@ export default {
   watch: {
     val(value) {
       this.$emit("input", value);
+    },
+    value(v){
+      this.val = v
     }
   }
 };

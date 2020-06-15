@@ -1,7 +1,7 @@
 <template>
   <div class="home page">
     <div class="home--title">
-      <div class="container py-5">
+      <div class="container py-4">
         <div class="d-flex home--title-wrap">
           <h1 class="font-weight-light mx-auto">
             <b class="font-weight-semibold">Tasks</b>
@@ -83,6 +83,7 @@
         <!-- <router-link :to="{}"></router-link> -->
       </nav>
     </div>
+   
   </div>
 </template>
 

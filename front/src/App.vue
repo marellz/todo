@@ -10,6 +10,5 @@
     <main>
       <router-view />
     </main>
-    <footer></footer>
   </div>
 </template>

@@ -1,7 +1,7 @@
 <template>
   <div class="list page">
     <div class="list--title">
-      <div class="container pt-5">
+      <div class="container pt-4">
         <div class="d-flex flex-column list--title-wrap border-bottom pb-4 mb-4">
           <h1 class="font-weight-light">
             <b>{{list.title}}</b>
@@ -14,7 +14,7 @@
         </div>
       </div>
     </div>
-    <div class="list--content pb-5">
+    <div class="list--content pt-5">
       <div class="container">
         <list-item v-for="(task, index) in tasks" :task="task" :key="index" :index="index"/>
       </div>
@@ -22,10 +22,10 @@
     <div class="list--page-nav">
       <div class="container py-3">
         <div class="d-flex align-items-center">
-          <router-link class="text-cultured" :to="{name:'home'}">
+          <router-link class="btn text-cultured" :to="{name:'home'}">
             <div class="d-flex">
-              <arrow-left-icon />
-              <h4 class="mb-0 ml-2">Back home</h4>
+              <arrow-left-icon size="20" />
+              <h6 class="mb-0 ml-2">Back home</h6>
             </div>
           </router-link>
           <div class="ml-auto d-flex">
@@ -88,10 +88,9 @@ export default {
     return {
       taskModal: false,
       newTask: {
-        name:"Pack bags",
-        due:"tomorrow morning"
+        name:"",
+        due:""
       }
-      // list:{}
     };
   },
   computed: {
@@ -116,13 +115,12 @@ export default {
       this.$router.push({ name: "home" });
     },
     addTask() {
-      console.log("saving");
-
       var t = this.newTask;
       if (t.name && t.due) {
-        t.todolist_id = this.id;
-        this.$store.dispatch("createTask", t);
+        this.newTask.todolist_id = this.id;
+        this.$store.dispatch("createTask", this.newTask);
         this.taskModal = false;
+        this.newTask = {}
       }
     }
   },
