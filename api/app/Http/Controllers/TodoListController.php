@@ -12,12 +12,16 @@ class TodoListController extends Controller
     public function index()
     {
         $lists = TodoList::all();
+        foreach ($lists as $list) {
+            $list->tasks = TodoList::find($list->id)->tasks;
+        }
         return response()->json(['lists' => $lists]);
     }
 
     public function show($id)
     {
         $list = TodoList::find($id);
+        $list->tasks = $list->tasks;
         return response()->json(['list' => $list]);
     }
 
@@ -34,8 +38,9 @@ class TodoListController extends Controller
     }
 
     public function delete($id)
-    {        
-        $deleted = TodoList::find($id)->delete() && Task::where('todolist_id',$id)->delete();
-        return response()->json(['deleted' => $deleted]);
+    {
+        $deleted = TodoList::find($id)->delete();
+        $deleted_tasks = Task::where('todolist_id', $id)->delete();
+        return response()->json(['deleted' => $deleted, 'deleted_tasks' => $deleted_tasks]);
     }
 }

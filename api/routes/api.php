@@ -13,7 +13,6 @@ Route::prefix('list')->group(function(){
 
 });
 
-
 Route::prefix('task')->group(function(){
 
     Route::post('/new','TaskController@store');

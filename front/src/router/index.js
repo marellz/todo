@@ -11,7 +11,7 @@ Vue.use(VueRouter)
     component: Home
   },
   {
-    path: '/list/:index',
+    path: '/list/:id',
     name: 'list', props: true,
     component: () => import(/* webpackChunkName: "list" */ '../views/List.vue')
   },
