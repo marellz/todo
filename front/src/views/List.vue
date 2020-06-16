@@ -4,6 +4,7 @@
       <div class="container pt-4">
         <div class="d-flex flex-column list--title-wrap border-bottom pb-4 mb-4">
           <h1 class="font-weight-light">
+            <span class="list--theme-cirlce" :style="`background-color:${list.bg}`"></span>
             <b>{{list.title}}</b>
           </h1>
           <h6
@@ -16,7 +17,7 @@
     </div>
     <div class="list--content pt-5">
       <div class="container">
-        <list-item v-for="(task, index) in tasks" :task="task" :key="index" :index="index"/>
+        <list-item @edit="editTask" @delete="deleteTask" v-for="(task, index) in tasks" :task="task" :key="index" :index="index"/>
       </div>
     </div>
     <div class="list--page-nav">
@@ -39,8 +40,8 @@
         </div>
       </div>
     </div>
-    <form @submit.prevent="addTask">
-      <modal title="Add new task" :active="taskModal" @close="taskModal = false">
+    <form @submit.prevent="newTask.id ? updateTask() : addTask()">
+      <modal :title="newTask.id ? 'Edit task' : 'Add new task'" :active="taskModal" @close="taskModal = false">
         <div class="row">
           <div class="col-sm-12">
             <form-input label="Name" :required="true" v-model="newTask.name" />
@@ -57,7 +58,8 @@
             data-dismiss="modal"
             @click="taskModal = false"
           >Close</button>
-          <button class="btn btn-primary">Save task</button>
+          <button class="btn btn-primary" v-if="newTask.id">Update task</button>
+          <button class="btn btn-primary" v-else>Save task</button>
         </template>
       </modal>
     </form>
@@ -90,7 +92,8 @@ export default {
       newTask: {
         name:"",
         due:""
-      }
+      },
+      deleteTimeout: null,
     };
   },
   computed: {
@@ -122,6 +125,25 @@ export default {
         this.taskModal = false;
         this.newTask = {}
       }
+    },
+    editTask(index){
+      this.newTask = this.tasks[index]
+      this.taskModal = true
+    },
+    updateTask(){
+      console.log('updated');
+      this.taskModal = false
+      this.$store.dispatch('updateTask',this.newTask)
+      this.newTask = {}
+    },
+    deleteTask(index){
+      this.deleteTimeout = setTimeout(()=>{
+        this.list.tasks.splice(index,1)
+      },3000)
+
+    },
+    undoDelete(){
+      clearTimeout(this.deleteTimeout)
     }
   },
   mounted() {

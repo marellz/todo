@@ -56,12 +56,13 @@ export default new Vuex.Store({
     },
 
     updateTask(state, payload) {
-      state.list.tasks[payload.index].complete = payload.complete
+      state.list.tasks[payload.index] = payload.task
     },
 
     deleteTask(state, payload) {
-      state.lists[payload.listIndex].tasks.splice(payload.taskIndex, 1)
+      state.list.tasks.splice(payload.taskIndex, 1)
     }
+
   },
   actions: {
     async getLists({ commit }) {
@@ -97,8 +98,19 @@ export default new Vuex.Store({
     },
 
     async updateTask({ commit }, task) {
-      const response = await axios.post(`${endPoint}/task/update/${task.id}`, { complete: task.complete })
-      commit('updateTask', { response:response.data.updated, complete:task.complete, index: task.index })
+      const response = await axios.post(`${endPoint}/task/update/${task.id}`, task)
+      var updated = response.data.updated
+      if(updated){
+        commit('updateTask', { index: task.index, task: task })
+      }
+      
+    },
+
+    async deleteTask({ commit }, task) {
+      const response = await axios.get(`${endPoint}/task/delete/${task.id}`)
+      if(response.data.deleted){
+        commit('deleteTask', { index: task.index })
+      }
     },
 
   },

@@ -1,3 +1,6 @@
+
+$offset_dist: -100px;
+
 .list {
     &--page-nav {
         position: fixed;
@@ -37,10 +40,14 @@
 
     &--item {
         margin-bottom: 1em;
-
+        display: flex;
+        overflow: hidden;
+        position: relative;
+        
         .form-check {
             display: flex;
             padding: 0;
+            width: 100%;
 
             &-label {
                 display: flex;
@@ -90,5 +97,34 @@
                 }
             }
         }
+        .form-check, .list--item-options,.list--item-toggler{
+            transition: all .2s ease;
+            transform: translateX(0);
+        }
+
+        &.active{
+            .form-check, .list--item-options,.list--item-toggler{
+                transform: translateX($offset_dist);
+            }
+        }
     }
+
+
+    &--item-options{
+        display: flex;
+        align-items: center;
+        position: absolute;
+        height: 100%;
+        left: 100%;
+        width: -$offset_dist;
+        background: $cultured;
+
+        .btn{
+            border-radius: 0;
+            height: 100%;
+            flex: 1 1 auto;
+        }
+    }
+
+
 }
