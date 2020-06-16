@@ -32,10 +32,13 @@
         display: flex;
         justify-content: center;
         .icon{
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             border-radius: 2px;
-            padding: 5px;
+            // padding: 5px;
             border: 1px solid $x-11;
+            @include r(40px);
         }
     }
 

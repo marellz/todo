@@ -11,42 +11,37 @@
       </div>
     </div>
 
-    <template v-if="newListForm.active">
-      <div class="container">
-        <form @submit.prevent="newList">
-          <div class="d-flex justify-content-end">
-            <button type="button" class="btn" @click="newListForm.active = false">
-              <x-icon />
-            </button>
-          </div>
-          <div class="form-group">
-            <label for>Create new list</label>
-            <input
-              type="text"
-              v-model="newListForm.name"
-              class="form-control"
-              placeholder
-              aria-describedby="helpId"
-            />
-          </div>
+    <form @submit.prevent="newList">
+      <modal
+        @close="newListForm.active= false"
+        title="Create new list"
+        :active="newListForm.active"
+      >
+        <form-input label="List name" v-model="newListForm.name" />
+        <color-selector label="List color" :colors="colors" v-model="newListForm.bg" />
+        <template slot="footer">
           <button
-            class="btn btn-primary btn-block"
+            type="button"
+            class="btn btn-secondary"
+            data-dismiss="modal"
+            @click="newListForm.active = false"
+          >Close</button>
+          <button
+            class="btn btn-primary"
             :disabled="newListForm.name==null || newListForm.name == ''"
-          >Add List</button>
-        </form>
-      </div>
-    </template>
+          >Save list</button>
+        </template>
+      </modal>
+    </form>
 
-    <template v-else>
-      <div class="home--add-list">
-        <button class="btn" @click="newListForm.active=true">
-          <span class="icon">
-            <plus-icon />
-          </span>
-          <p class="mb-0 mt-3">Add List</p>
-        </button>
-      </div>
-    </template>
+    <div class="home--add-list">
+      <button class="btn btn-no-shadow" @click="newListForm.active=true">
+        <span class="icon">
+          <plus-icon size="18" />
+        </span>
+        <p class="mb-0 mt-3 small text-cultured">Add List</p>
+      </button>
+    </div>
 
     <div class="home--list">
       <template v-if="lists.length">
@@ -68,9 +63,9 @@
       <template v-else>
         <div class="container">
           <div class="d-flex flex-column align-items-center">
-          <h3>No Lists currently.</h3>
-          <p class="text-cultured">Add one</p>
-
+            <img src="@/assets/img/empty.svg" height="100" alt="">
+            <h3 class="mt-3">No Lists currently</h3>
+            <p class="text-cultured">It's a little boring.</p>
           </div>
         </div>
       </template>
@@ -83,14 +78,13 @@
         <!-- <router-link :to="{}"></router-link> -->
       </nav>
     </div>
-   
   </div>
 </template>
 
 <script>
 import HomeList from "@/components/HomeList";
 import { Carousel, Slide } from "vue-carousel";
-import { PlusIcon, XIcon } from "vue-feather-icons";
+import { PlusIcon } from "vue-feather-icons";
 
 export default {
   name: "Home",
@@ -98,15 +92,23 @@ export default {
     HomeList,
     Carousel,
     Slide,
-    PlusIcon,
-    XIcon
+    PlusIcon
   },
   data() {
     return {
       itemSpan: 2,
       newListForm: {
         active: false
-      }
+      },
+      colors: [
+        "#EF767A",
+        "#456990",
+        "#49BEAA",
+        "#1A1423",
+        "#9A275A",
+        "#016FB9",
+        "#6D8EA0"
+      ]
     };
   },
   computed: {
@@ -116,8 +118,11 @@ export default {
   },
   methods: {
     newList() {
-      this.$store.dispatch("newList", { title: this.newListForm.name });
-      (this.newListForm.active = false), (this.newListForm.name = null);
+      var n = this.newListForm;
+      this.$store.dispatch("newList", { title: n.name, bg: n.bg });
+      this.newListForm = {
+        active: false
+      };
     }
   },
   mounted() {

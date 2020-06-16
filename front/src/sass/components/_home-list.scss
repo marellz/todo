@@ -1,51 +1,65 @@
-.home-list-item{
-   .card{
-       color: white;
-       border: none;
-       .card-title{
-           margin-bottom: 0;
-       }
-       .card-header{
-           border: none;
-           @include py(2rem)
-       }
-       .list-group{
-           height: 200px;
-           &-item{
-               background :transparent;
-               border: none;
-               position: relative;
+.home-list-item {
+    .card {
+        color: white;
+        border: none;
+        .card-title {
+            margin-bottom: 0;
+        }
+        .card-header {
+            border: none;
+            @include py(2rem);
+        }
+    }
 
-               $complete-color: rgba(#fff,.3);
+    .list-group {
+        height: 200px;
+        &-item {
+            background: transparent;
+            border: none;
+            position: relative;
+            display: flex;
+            align-items: center;
 
-               &:hover:not(.no-tasks){
-                   background: rgba(black,.04);
-               }
+            $complete-color: rgba(#fff, 0.3);
 
-               &:after{
-                   position: absolute;
-                   content: '';
-                   display: block;
-                   height: 1px;
-                   width: 0;
-                   right: -1.25rem;
-                   background: $complete-color;
-                   top: 50%;
-                   @include hidden;
-                   transition: all .25s ease;
-                   
-               }
+            &:hover:not(.no-tasks) {
+                background: rgba(black, 0.04);
+            }
 
+            &:before,
+            &:after {
+                display: block;
+                content: "";
+            }
 
-               &.complete{
-                   color: $complete-color;
-                   &:after{
-                       width: 100%;
-                       @include visible;
-                   }
+            &:before {
+                @include r(10px);
+                border: 1px solid rgba(white, 0.8);
+                border-radius: 2px;
+                margin-right: 10px;
+            }
 
-               }
-           }
-       }
-   }
+            &:after {
+                position: absolute;
+                height: 1px;
+                width: 0;
+                right: -1.25rem;
+                background: $complete-color;
+                top: 50%;
+                @include hidden;
+                transition: all 0.25s ease;
+            }
+
+            &.complete {
+                color: $complete-color;
+                &:after {
+                    width: 100%;
+                    @include visible;
+                }
+                &:before{
+                    opacity: .2;
+                }
+            }
+        }
+    }
 }

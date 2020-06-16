@@ -16,7 +16,10 @@
       </template>
       <template v-else>
         <ul class="list-group list-group-flush">
-          <li class="list-group-item text-center font-italic no-tasks">No Tasks.</li>
+          <div class="d-flex justify-content-center mt-3 mb-2">
+            <img src="@/assets/img/create.svg" height="50" alt />
+          </div>
+          <span class="list-group-item text-center font-italic no-tasks">Click to add tasks.</span>
         </ul>
       </template>
     </div>
@@ -39,14 +42,14 @@ export default {
     hasTasks() {
       return this.item.tasks && this.item.tasks.length;
     },
-    tasks(){
-      return this.hasTasks ? this.item.tasks.filter((task,index)=>{
-        return index <= 3
-      }) : []
+    tasks() {
+      return this.hasTasks
+        ? this.item.tasks.filter((task, index) => {
+            return index <= 3;
+          })
+        : [];
     }
   },
-  methods: {
-    
-  }
+  methods: {}
 };
 </script>
