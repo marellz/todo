@@ -17,7 +17,15 @@
     </div>
     <div class="list--content pt-5">
       <div class="container">
-        <list-item @edit="editTask" @delete="deleteTask" v-for="(task, index) in tasks" :task="task" :key="index" :index="index"/>
+        <list-item
+          @edit="editTask"
+          @delete="toggleTaskDelete"
+          @evadeDelete="evadeTaskDelete"
+          v-for="(task, index) in tasks"
+          :item="task"
+          :key="index"
+          :index="index"
+        />
       </div>
     </div>
     <div class="list--page-nav">
@@ -30,7 +38,7 @@
             </div>
           </router-link>
           <div class="ml-auto d-flex">
-            <button class="btn text-danger" @click="deleteList">
+            <button class="btn text-danger" @click="deletePrompt = true">
               <trash-2-icon />
             </button>
             <button class="ml-3 btn btn-primary" @click="taskModal=true">
@@ -41,7 +49,11 @@
       </div>
     </div>
     <form @submit.prevent="newTask.id ? updateTask() : addTask()">
-      <modal :title="newTask.id ? 'Edit task' : 'Add new task'" :active="taskModal" @close="taskModal = false">
+      <modal
+        :title="newTask.id ? 'Edit task' : 'Add new task'"
+        :active="taskModal"
+        @close="closeModal"
+      >
         <div class="row">
           <div class="col-sm-12">
             <form-input label="Name" :required="true" v-model="newTask.name" />
@@ -56,13 +68,19 @@
             type="button"
             class="btn btn-outline-secondary"
             data-dismiss="modal"
-            @click="taskModal = false"
+            @click="closeModal"
           >Close</button>
           <button class="btn btn-primary" v-if="newTask.id">Update task</button>
           <button class="btn btn-primary" v-else>Save task</button>
         </template>
       </modal>
     </form>
+    <prompt
+      :show="deletePrompt"
+      action="Are you sure you want to delete this list?"
+      @close="deletePrompt = false"
+      @confirm="deleteList"
+    ></prompt>
   </div>
 </template>
 <script>
@@ -90,15 +108,21 @@ export default {
     return {
       taskModal: false,
       newTask: {
-        name:"",
-        due:""
+        name: "",
+        due: ""
       },
       deleteTimeout: null,
+      deletePrompt: false,
+      deletableTask: {
+        index: null,
+        id: null
+      }
     };
   },
   computed: {
     list() {
-      return this.$store.getters.list;
+      var l = this.$store.getters.list;
+      return l ? l : {};
     },
     tasks() {
       return this.list.tasks ? this.list.tasks : [];
@@ -123,27 +147,40 @@ export default {
         this.newTask.todolist_id = this.id;
         this.$store.dispatch("createTask", this.newTask);
         this.taskModal = false;
-        this.newTask = {}
+        this.newTask = {};
       }
     },
-    editTask(index){
-      this.newTask = this.tasks[index]
-      this.taskModal = true
+    editTask(index) {
+      this.newTask = this.tasks[index];
+      this.taskModal = true;
     },
-    updateTask(){
-      console.log('updated');
-      this.taskModal = false
-      this.$store.dispatch('updateTask',this.newTask)
-      this.newTask = {}
+    updateTask() {
+      console.log("updated");
+      this.taskModal = false;
+      this.$store.dispatch("updateTask", this.newTask);
+      this.newTask = {};
     },
-    deleteTask(index){
-      this.deleteTimeout = setTimeout(()=>{
-        this.list.tasks.splice(index,1)
-      },3000)
+    toggleTaskDelete(item) {
+      var task = this.list.tasks[item.index];
+      this.deletableTask = item;
+      task.delete = true;
+      this.deleteTimeout = setTimeout(this.confirmTaskDelete, 3000);
+    },
+    evadeTaskDelete() {
+      console.log("evade called");
+      clearTimeout(this.deleteTimeout);
+      this.tasks[this.deletableTask.index].delete = false;
+    },
 
+    confirmTaskDelete() {
+      this.$store.dispatch("deleteTask", this.deletableTask.id);
     },
-    undoDelete(){
-      clearTimeout(this.deleteTimeout)
+
+    closeModal() {
+      this.taskModal = false;
+      if (this.newTask.id) {
+        this.newTask = {};
+      }
     }
   },
   mounted() {

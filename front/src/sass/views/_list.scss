@@ -1,4 +1,3 @@
-
 $offset_dist: -100px;
 
 .list {
@@ -7,7 +6,7 @@ $offset_dist: -100px;
         width: 100%;
         bottom: 0;
         background: #fff;
-        box-shadow: 0 0 10px rgba(black,.2);
+        box-shadow: 0 0 10px rgba(black, 0.2);
     }
     &--content {
         flex: 1 1 auto;
@@ -28,8 +27,8 @@ $offset_dist: -100px;
             content: "";
             position: absolute;
             background: $x-11;
-            top: .75rem;
-            transition: width .3s ease;
+            top: 0.75rem;
+            transition: width 0.3s ease;
         }
     }
 
@@ -43,7 +42,7 @@ $offset_dist: -100px;
         display: flex;
         overflow: hidden;
         position: relative;
-        
+
         .form-check {
             display: flex;
             padding: 0;
@@ -97,20 +96,23 @@ $offset_dist: -100px;
                 }
             }
         }
-        .form-check, .list--item-options,.list--item-toggler{
-            transition: all .2s ease;
+        // .form-check,
+        .list--item-options,
+        .list--item-toggler {
+            transition: all 0.2s ease;
             transform: translateX(0);
         }
 
-        &.active{
-            .form-check, .list--item-options,.list--item-toggler{
+        &.active {
+            // .form-check,
+            .list--item-options,
+            .list--item-toggler {
                 transform: translateX($offset_dist);
             }
         }
     }
 
-
-    &--item-options{
+    &--item-options {
         display: flex;
         align-items: center;
         position: absolute;
@@ -119,12 +121,41 @@ $offset_dist: -100px;
         width: -$offset_dist;
         background: $cultured;
 
-        .btn{
+        .btn {
             border-radius: 0;
             height: 100%;
             flex: 1 1 auto;
+            &:focus{
+                box-shadow: none;
+            }
         }
     }
 
+    &--item-deletable {
+        background: rgba($x-11, 0.2);
+        flex: 1 1 auto;
+    }
 
+    &--item-delete {
+        display: flex;
+        padding: 8px;
+        padding-left: 10px;
+        align-items: center;
+    }
+    &--delete-timebar {
+        display: block;
+        content: "";
+        background: $info;
+        height: 2px;
+        animation: timebar 3s ease-in;
+    }
+}
+
+@keyframes timebar {
+    from {
+        width: 100%;
+    }
+    to {
+        width: 0;
+    }
 }

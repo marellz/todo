@@ -59,8 +59,10 @@ export default new Vuex.Store({
       state.list.tasks[payload.index] = payload.task
     },
 
-    deleteTask(state, payload) {
-      state.list.tasks.splice(payload.taskIndex, 1)
+    deleteTask(state, id) {
+      var tasks = state.list.tasks,
+        task = tasks.find(task => task.id == id);
+      state.list.tasks.splice(tasks.indexOf(task), 1)
     }
 
   },
@@ -83,7 +85,7 @@ export default new Vuex.Store({
     },
     async deleteList({ commit }, list) {
       const response = await axios.get(`${endPoint}/list/delete/${list.id}`)
-      if (response.deleted) {
+      if (response.data.deleted) {
         commit('deleteList', list)
       } else {
         console.log('delete failed');
@@ -100,16 +102,16 @@ export default new Vuex.Store({
     async updateTask({ commit }, task) {
       const response = await axios.post(`${endPoint}/task/update/${task.id}`, task)
       var updated = response.data.updated
-      if(updated){
+      if (updated) {
         commit('updateTask', { index: task.index, task: task })
       }
-      
+
     },
 
-    async deleteTask({ commit }, task) {
-      const response = await axios.get(`${endPoint}/task/delete/${task.id}`)
-      if(response.data.deleted){
-        commit('deleteTask', { index: task.index })
+    async deleteTask({ commit }, id) {
+      const response = await axios.get(`${endPoint}/task/delete/${id}`)
+      if (response.data.deleted) {
+        commit('deleteTask', id)
       }
     },
 
