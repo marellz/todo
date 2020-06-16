@@ -1,0 +1,44 @@
+.color-selector{
+    &--list{
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    &--item{
+        margin-right: 5px;
+        margin-bottom: 5px;
+        height: 30px;
+        width: 70px;
+    }
+    
+    
+    &--label{
+        margin: 0;
+        @include r(100%);
+        // border: 1px solid $x-11;
+        border-radius: 4px;
+        border: 3px solid transparent;
+        transition: all .2s ease;
+    }
+
+
+    &--input{
+        @include hidden;
+        @include r(0.1px);
+        z-index: -10;
+        position: absolute;
+    }
+
+    &--input:checked + &--label{
+        border-color: rgba($dark,.3)
+    }
+
+    &--box{
+        content: '';
+        display: block;
+        @include r(100%);
+        border-radius: 2px;
+        // margin: 2px;
+        
+    }
+}
