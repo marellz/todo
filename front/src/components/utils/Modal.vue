@@ -13,10 +13,10 @@
             aria-label="Close"
             @click="$emit('close')"
           >
-            <span aria-hidden="true">&times;</span>
+            <x-icon size="22"/>
           </button>
         </div>
-        <div class="modal-body pb-5">
+        <div class="modal-body pb-4">
           <slot>
             <p>Modal body text goes here.</p>
           </slot>
@@ -38,8 +38,12 @@
   </div>
 </template>
 <script>
+import { XIcon } from 'vue-feather-icons'
 export default {
   name: "Modal",
+  components:{
+    XIcon
+  },
   props: {
     active: {
       type: Boolean,

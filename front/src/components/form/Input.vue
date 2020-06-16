@@ -1,6 +1,6 @@
 <template>
   <div
-    class="form-group custom-form form-input"
+    class="form-group custom-form custom-form--input"
     :class="{
       'required' : required, 
       'disabled':disabled, 
