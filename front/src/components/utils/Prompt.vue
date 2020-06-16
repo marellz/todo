@@ -1,13 +1,8 @@
 <template>
-  <modal title="Confirm" @close="close" :active="show">
+  <modal :title="title" @close="close" :active="show">
     <p>{{action}}</p>
     <template slot="footer">
-      <button
-        type="button"
-        class="btn btn-secondary"
-        data-dismiss="modal"
-        @click="close"
-      >Cancel</button>
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="close">Cancel</button>
       <button type="button" @click="confirm" class="btn btn-primary">Yes, I am</button>
     </template>
   </modal>
@@ -22,7 +17,7 @@ export default {
     },
     title: {
       type: String,
-      default: "Confirmation"
+      default: "Confirm"
     },
     show: {
       type: Boolean,
@@ -34,10 +29,8 @@ export default {
     confirm() {
       this.$emit("confirm");
     },
-    close(){
-        console.log('clsoe!');
-        
-        this.$emit('close')
+    close() {
+      this.$emit("close");
     }
   }
 };
