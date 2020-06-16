@@ -19,7 +19,7 @@
           <div class="d-flex justify-content-center mt-3 mb-2">
             <img src="@/assets/img/create.svg" height="50" alt />
           </div>
-          <span class="list-group-item text-center font-italic no-tasks">Click to add tasks.</span>
+          <span class="d-block mt-3 text-center font-italic no-tasks">Click to add tasks.</span>
         </ul>
       </template>
     </div>

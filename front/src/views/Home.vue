@@ -119,6 +119,9 @@ export default {
   methods: {
     newList() {
       var n = this.newListForm;
+      if(!n.bg){
+        n.bg = this.colors[0]
+      }
       this.$store.dispatch("newList", { title: n.name, bg: n.bg });
       this.newListForm = {
         active: false
