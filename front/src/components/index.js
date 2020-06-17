@@ -5,6 +5,7 @@ import FormText from './form/Text'
 import ColorSelector from './form/ColorSelector'
 import Modal from './utils/Modal'
 import Prompt from './utils/Prompt'
+import DatePicker from './utils/DatePicker'
 [
     FormInput,
     FormSelect,
@@ -13,5 +14,6 @@ import Prompt from './utils/Prompt'
     
     Modal,
     Prompt,
+    DatePicker,
     
 ].forEach(component => Vue.component(component.name, component))
