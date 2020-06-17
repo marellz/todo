@@ -89,7 +89,7 @@ import {
   ArrowLeftIcon,
   Trash2Icon /*XIcon*/
 } from "vue-feather-icons";
-import ListItem from "@/components/ListItem.vue";
+import ListItem from "@/components/lists/ListItem.vue";
 export default {
   name: "List",
   components: {
@@ -155,19 +155,22 @@ export default {
       this.taskModal = true;
     },
     updateTask() {
-      console.log("updated");
       this.taskModal = false;
       this.$store.dispatch("updateTask", this.newTask);
       this.newTask = {};
     },
     toggleTaskDelete(item) {
+
+      // deletable = true
       var task = this.list.tasks[item.index];
       this.deletableTask = item;
       task.delete = true;
       this.deleteTimeout = setTimeout(this.confirmTaskDelete, 3000);
     },
     evadeTaskDelete() {
-      console.log("evade called");
+
+      // deletable = false
+
       clearTimeout(this.deleteTimeout);
       this.tasks[this.deletableTask.index].delete = false;
     },
