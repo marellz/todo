@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import HomeList from "@/components/list/HomeList";
+import HomeList from "@/components/lists/HomeList";
 import { Carousel, Slide } from "vue-carousel";
 import { PlusIcon } from "vue-feather-icons";
 
