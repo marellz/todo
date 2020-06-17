@@ -17,11 +17,19 @@
     </div>
     <div class="list--content pt-5">
       <div class="container">
-        <list-item
+        <div class="list--item-deletable" v-if="deletableTasks.length">
+          <div class="list--item-delete">
+            <trash-icon size="15" />
+            <span class="d-block ml-3 mt-1">Task deleted.</span>
+            <button @click="evadeTaskDelete" class="btn ml-auto font-weight-semibold text-info">Undo</button>
+          </div>
+          <span class="list--delete-timebar"></span>
+        </div>
+        <task
           @edit="editTask"
           @delete="toggleTaskDelete"
           @evadeDelete="evadeTaskDelete"
-          v-for="(task, index) in tasks"
+          v-for="(task, index) in visibleTasks"
           :item="task"
           :key="index"
           :index="index"
@@ -84,20 +92,17 @@
   </div>
 </template>
 <script>
-import {
-  PlusIcon,
-  ArrowLeftIcon,
-  Trash2Icon /*XIcon*/
-} from "vue-feather-icons";
-import ListItem from "@/components/lists/ListItem.vue";
+import { PlusIcon, ArrowLeftIcon, Trash2Icon, TrashIcon } from "vue-feather-icons";
+import Task from "@/components/lists/Task.vue";
 export default {
   name: "List",
   components: {
-    PlusIcon, // XIcon,
+    PlusIcon,
     ArrowLeftIcon,
+    TrashIcon,
     Trash2Icon,
 
-    ListItem
+    Task
   },
   props: {
     id: {
@@ -126,6 +131,12 @@ export default {
     },
     tasks() {
       return this.list.tasks ? this.list.tasks : [];
+    },
+    visibleTasks() {
+      return this.tasks.filter(task=>!task.delete)
+    },
+    deletableTasks(){
+      return this.tasks.filter(task=>task.delete)
     },
     completed() {
       return this.tasks.filter(task => {
@@ -160,25 +171,18 @@ export default {
       this.newTask = {};
     },
     toggleTaskDelete(item) {
-
-      // deletable = true
-      var task = this.list.tasks[item.index];
-      this.deletableTask = item;
-      task.delete = true;
-      this.deleteTimeout = setTimeout(this.confirmTaskDelete, 3000);
+      this.$store.commit("allowDelete", item.id);
+      this.deleteTimeout = setTimeout(() => {
+        this.confirmTaskDelete(item.id);
+      }, 3000);
     },
-    evadeTaskDelete() {
-
-      // deletable = false
-
+    evadeTaskDelete(id) {
+      this.$store.commit("preventDelete", id);
       clearTimeout(this.deleteTimeout);
-      this.tasks[this.deletableTask.index].delete = false;
     },
-
-    confirmTaskDelete() {
-      this.$store.dispatch("deleteTask", this.deletableTask.id);
+    confirmTaskDelete(id) {
+      // this.$store.dispatch("deleteTask", id);
     },
-
     closeModal() {
       this.taskModal = false;
       if (this.newTask.id) {
