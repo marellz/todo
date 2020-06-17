@@ -15,25 +15,37 @@
         </div>
       </div>
     </div>
-    <div class="list--content pt-5">
-      <div class="container">
-        <div class="list--item-deletable" v-if="deletableTasks.length">
-          <div class="list--item-delete">
-            <trash-icon size="15" />
-            <span class="d-block ml-3 mt-1">Task deleted.</span>
-            <button @click="evadeTaskDelete" class="btn ml-auto font-weight-semibold text-info">Undo</button>
+    <div class="list--content">
+      <div class="container pb-3">
+        
+        <!-- deletables -->
+
+        <template v-if="deletableTasks.length">
+          <div
+            class="d-flex align-items-center py-2"
+            v-for="(item, index) in deletableTasks"
+            :key="index"
+          >
+            <span class="pl-4">Task ID: {{item}} has been deleted</span>
+            <div class="ml-auto">
+              <button class="btn btn-sm text-danger" @click="preventDelete(item)">Undo</button>
+            </div>
           </div>
-          <span class="list--delete-timebar"></span>
-        </div>
-        <task
-          @edit="editTask"
-          @delete="toggleTaskDelete"
-          @evadeDelete="evadeTaskDelete"
-          v-for="(task, index) in visibleTasks"
-          :item="task"
-          :key="index"
-          :index="index"
-        />
+        </template>
+      </div>
+      <div class="container">
+
+          <!-- tasks -->
+
+          <div v-for="(task, index) in tasks" :key="index">
+            <task
+              v-if="!deletableTasks.includes(task.id)"
+              @edit="editTask"
+              @delete="deleteTask"
+              :item="task"
+              :index="index"
+            />
+          </div>
       </div>
     </div>
     <div class="list--page-nav">
@@ -69,7 +81,6 @@
           <div class="col-sm-12">
             <form-input label="Due" :required="true" v-model="newTask.due" />
           </div>
-          <!-- <div class="col-sm-12"></div> -->
         </div>
         <template slot="footer">
           <button
@@ -92,14 +103,13 @@
   </div>
 </template>
 <script>
-import { PlusIcon, ArrowLeftIcon, Trash2Icon, TrashIcon } from "vue-feather-icons";
+import { PlusIcon, ArrowLeftIcon, Trash2Icon } from "vue-feather-icons";
 import Task from "@/components/lists/Task.vue";
 export default {
   name: "List",
   components: {
     PlusIcon,
     ArrowLeftIcon,
-    TrashIcon,
     Trash2Icon,
 
     Task
@@ -116,12 +126,9 @@ export default {
         name: "",
         due: ""
       },
-      deleteTimeout: null,
+      deleteTimeout: {},
       deletePrompt: false,
-      deletableTask: {
-        index: null,
-        id: null
-      }
+      deletableTasks: []
     };
   },
   computed: {
@@ -131,12 +138,6 @@ export default {
     },
     tasks() {
       return this.list.tasks ? this.list.tasks : [];
-    },
-    visibleTasks() {
-      return this.tasks.filter(task=>!task.delete)
-    },
-    deletableTasks(){
-      return this.tasks.filter(task=>task.delete)
     },
     completed() {
       return this.tasks.filter(task => {
@@ -170,19 +171,30 @@ export default {
       this.$store.dispatch("updateTask", this.newTask);
       this.newTask = {};
     },
-    toggleTaskDelete(item) {
-      this.$store.commit("allowDelete", item.id);
-      this.deleteTimeout = setTimeout(() => {
-        this.confirmTaskDelete(item.id);
-      }, 3000);
+
+    deleteTask(task) {
+      if (!this.deletableTasks.includes(task)) {
+        this.deletableTasks.push(task);
+      }
+      this.deleteTimeout[task] = setTimeout(() => {
+        this.confirmTaskDelete(task);
+      }, 1000);
     },
-    evadeTaskDelete(id) {
-      this.$store.commit("preventDelete", id);
-      clearTimeout(this.deleteTimeout);
+
+    preventDelete(id) {
+      clearTimeout(this.deleteTimeout[id])
+      var index = this.deletableTasks.indexOf(id)
+      this.deletableTasks.splice(index, 1);
     },
+
     confirmTaskDelete(id) {
-      // this.$store.dispatch("deleteTask", id);
+      console.log("confirmed");
+      var index = this.deletableTasks.indexOf(id)
+      this.deletableTasks.splice(index, 1);
+      this.$store.dispatch("deleteTask", id);
+
     },
+
     closeModal() {
       this.taskModal = false;
       if (this.newTask.id) {

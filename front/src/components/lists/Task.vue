@@ -2,7 +2,7 @@
   <div
     class="list--item"
     :class="{'active':active,'list--item-deletable':task.delete}"
-   
+    v-click-outside="disableActive"
   >
     <div class="form-check">
       <input
@@ -15,7 +15,7 @@
       <label class="form-check-label" :for="`task-index-${index}`">
         <div class="d-flex w-100">
           <div class="flex-grow-1 ml-2">
-            <span class="list--item-title m-0">{{task.name}}</span>
+            <span class="list--item-title m-0">Task <b>ID: {{task.id}}</b></span>
             <br />
             <small class="list--item-due">{{task.due}}</small>
           </div>
@@ -36,7 +36,7 @@
       <button class="btn">
         <edit-2-icon size="18" @click="toggleEdit" />
       </button>
-      <button class="btn btn-danger" @click="emitDelete">
+      <button class="btn btn-danger" @click="deleteTask">
         <trash-icon size="18" />
       </button>
     </div>
@@ -94,13 +94,13 @@ export default {
       this.active = false;
     },
 
-    emitDelete() {
-      this.active = false;
-      this.$emit("delete", { id: this.item.id, index: this.index });
+
+    deleteTask(){
+      this.active = false
+      this.$emit('delete',this.task.id);
+      console.log('delete', this.task.id);
+      
     },
-    emitEvadeDelete() {
-      this.$emit("evadeDelete", this.item.id);
-    }
   },
 
   directives: {

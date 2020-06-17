@@ -94,6 +94,7 @@ export default new Vuex.Store({
 
 
     // tasks
+    
     async createTask({ commit }, task) {
       const response = await axios.post(`${endPoint}/task/new`, task)
       commit('createTask', response.data)
@@ -105,10 +106,9 @@ export default new Vuex.Store({
       if (updated) {
         commit('updateTask', { index: task.index, task: task })
       }
-
     },
 
-    async deleteTask({ commit }, id) {
+    async deleteTask({ commit,state}, id) {
       const response = await axios.get(`${endPoint}/task/delete/${id}`)
       if (response.data.deleted) {
         commit('deleteTask', id)
