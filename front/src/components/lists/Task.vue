@@ -15,7 +15,7 @@
       <label class="form-check-label" :for="`task-index-${index}`">
         <div class="d-flex w-100">
           <div class="flex-grow-1 ml-2">
-            <span class="list--item-title m-0">Task <b>ID: {{task.id}}</b></span>
+            <span class="list--item-title m-0">{{task.name}}</span>
             <br />
             <small class="list--item-due">{{task.due}}</small>
           </div>
@@ -93,8 +93,7 @@ export default {
     disableActive() {
       this.active = false;
     },
-
-
+    
     deleteTask(){
       this.active = false
       this.$emit('delete',this.task.id);
