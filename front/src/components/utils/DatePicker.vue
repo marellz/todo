@@ -1,75 +1,100 @@
 <template>
-  <div class="form-group datepicker">
-    <label :for="id" v-if="label">{{label}}</label>
-    <div class="d-flex flex-column">
-      <input
-        type="text"
-        v-mask="`##${strSeparator}##${strSeparator}####`"
-        v-model="selectedDateString"
-        @blur="setUserDate"
-        class="form-control form-control-lg"
-        :placeholder="placeholder ? placeholder : 'Select a date'"
-      />
-      <button @click="active = !active" class="mt-4 btn btn-primary dp-icon btn-lg">select</button>
+  <div class="datepicker" v-click-outside="close">
+    <slot />
+    <template v-if="active">
+      <div class="d-flex flex-column">
+        <div class="dp_calendar border" :class="{'active':active}">
+          <div class="month d-flex">
+            <button type="button" class="pt-0 prev btn mr-auto btn-sm" @click="lastMonth()">
+              <chevron-left-icon />
+            </button>
 
-      <div class="dp_calendar border" :class="{'active':active}">
-        <div class="month d-flex">
-          <button type="button" class="pt-0 prev btn mr-auto btn-sm" @click="lastMonth()">&#10094;</button>
-
-          <div class="input-group">
-            <select
-              class="form-control form-control-sm"
-              @change="calcMonthDays"
-              v-model="userDate.month"
-            >
-              <option :value="i" v-for="(m,i) in months" :key="i">{{m}}</option>
-            </select>
-            <select
-              class="form-control form-control-sm"
-              @change="calcMonthDays"
-              v-model="userDate.year"
-            >
-              <option :value="y" v-for="(y,i) in years" :key="i">{{y}}</option>
-            </select>
+            <div class="input-group">
+              <select
+                class="form-control form-control-sm"
+                @change="calcMonthDays"
+                v-model="userDate.month"
+              >
+                <option :value="i" v-for="(m,i) in months" :key="i">{{m}}</option>
+              </select>
+              <select
+                class="form-control form-control-sm"
+                @change="calcMonthDays"
+                v-model="userDate.year"
+              >
+                <option :value="y" v-for="(y,i) in years" :key="i">{{y}}</option>
+              </select>
+            </div>
+            <button type="button" class="pt-0 next btn ml-auto btn-sm" @click="nextMonth()">
+              <chevron-right-icon />
+            </button>
           </div>
-          <button type="button" class="pt-0 next btn ml-auto btn-sm" @click="nextMonth()">&#10095;</button>
-        </div>
 
-        <table class="table">
-          <thead>
-            <th v-for="(item, index) in days" :key="index">{{item}}</th>
-          </thead>
-          <tbody>
-            <tr v-for="(item, index) in monthDays" :key="index">
-              <td v-for="(d, i) in item" :key="i">
-                <template v-if="d.prevMonth || d.nextMonth">
-                  <span class="btn btn-sm text-muted date-btn">{{d.day}}</span>
-                </template>
-                <template v-else>
-                  <button
-                    @click="selectDate(d.day)"
-                    :class="{'btn-secondary':d.day == currentDateParsed.day && currentDateParsed.month == userDate.month && currentDateParsed.year == userDate.year,
+          <table class="table">
+            <thead>
+              <th v-for="(item, index) in days" :key="index">{{item}}</th>
+            </thead>
+            <tbody>
+              <tr v-for="(item, index) in monthDays" :key="index">
+                <td v-for="(d, i) in item" :key="i">
+                  <template v-if="d.prevMonth || d.nextMonth">
+                    <span class="btn btn-sm text-muted date-btn">{{d.day}}</span>
+                  </template>
+                  <template v-else>
+                    <button
+                      @click="selectDate(d.day)"
+                      :class="{'btn-secondary':d.day == currentDateParsed.day && currentDateParsed.month == userDate.month && currentDateParsed.year == userDate.year,
                       'btn-primary':selectedDate.day == d.day && selectedDate.month == userDate.month && selectedDate.year == userDate.year}"
-                    class="date-btn btn-sm btn"
-                    type="button"
-                  >{{d.day}}</button>
-                </template>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                      class="date-btn btn-sm btn"
+                      type="button"
+                    >{{d.day}}</button>
+                  </template>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
+    </template>
   </div>
 </template>
 
 <script>
 import Vue from "vue";
 import VueMask from "v-mask";
+import { ChevronLeftIcon, ChevronRightIcon } from "vue-feather-icons";
+import ClickOutside from "vue-click-outside";
 Vue.use(VueMask);
 export default {
   name: "DatePicker",
-  props: ["label", "placeholder", "value"],
+  components: {
+    ChevronLeftIcon,
+    ChevronRightIcon
+  },
+  props: {
+    label: {
+      type: String,
+      default: null
+    },
+    placeholder: {
+      type: Array,
+      default: () => {
+        return ["Date", "Time"];
+      }
+    },
+    value: {
+      type: String,
+      default: null
+    },
+    id: {
+      type: String,
+      default: "date-picker--0"
+    },
+    active: {
+      type: Boolean,
+      default: false
+    }
+  },
   watch: {
     selectedDateString: function(val) {
       this.$emit("input", val);
@@ -106,7 +131,6 @@ export default {
       ],
       years: [],
       yearsShowLast: 50,
-      active: false,
       userDate: {},
       selectedDate: {},
       selectedDateString: this.value,
@@ -185,17 +209,21 @@ export default {
 
       this.calcMonthDays();
     },
-    selectDate(day) {
+    selectDate(date) {
+      var day  = date ? date : this.userDate.day
       this.selectedDate = {
         day: day,
         month: this.userDate.month,
         year: this.userDate.year
       };
+
       this.selectedDateString = [
         this.selectedDate.day,
         this.selectedDate.month + 1,
         this.selectedDate.year
       ].join(this.strSeparator);
+
+      this.close()
     },
     setUserDate() {
       var d = new Date(this.selectedDateString);
@@ -205,6 +233,9 @@ export default {
       };
       this.selectedDate = this.userDate;
       this.selectedDate.day = d.getDate();
+    },
+    close() {
+      this.$emit("close");
     }
   },
   mounted() {
@@ -224,6 +255,11 @@ export default {
     }
 
     this.calcMonthDays();
+    this.selectDate()
+  },
+
+  directives: {
+    ClickOutside
   }
 };
 </script>

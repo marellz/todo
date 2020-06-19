@@ -1,15 +1,17 @@
 .datepicker {
   position: relative;
   .dp_calendar {
-    position: absolute;
+    // position: absolute;
     width: 100%;
     background: #fff;
+    top: 100%;
     visibility: hidden;
     opacity: 0;
-    top: 100%;
+    height: 0;
     &.active {
       visibility: visible;
       opacity: 1;
+      height: auto;
     }
 
     .input-group {
