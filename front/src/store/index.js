@@ -108,7 +108,7 @@ export default new Vuex.Store({
       }
     },
 
-    async deleteTask({ commit,state}, id) {
+    async deleteTask({ commit }, id) {
       const response = await axios.get(`${endPoint}/task/delete/${id}`)
       if (response.data.deleted) {
         commit('deleteTask', id)

@@ -1,0 +1,43 @@
+.timepicker{
+    &--group{
+        display: flex;
+        border: 1px solid $input-border-color;
+        border-radius: $input-border-radius;
+
+        .ps{
+            height: 200px;
+        }
+    }
+
+    &--element-wrap{
+        flex: 1 1 auto;
+        &:not(:first-child){
+            border-left: 1px solid $input-border-color;
+        }
+    }
+
+    &-element-item{
+
+        input{
+            position: absolute;
+            z-index: -111;
+            @include hidden;
+            @include r(0px)
+        }
+
+        label{
+            display: block;
+            padding: 5px 10px;
+            margin-bottom: 0;
+            &:focus,&:hover{
+                background: rgba(black,.05);
+            }
+        }
+
+        input:checked + label{
+            background: $primary;
+            color: white;
+        }
+    }
+
+}
