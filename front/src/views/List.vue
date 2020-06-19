@@ -17,7 +17,6 @@
     </div>
     <div class="list--content">
       <div class="container pb-3">
-        
         <!-- deletables -->
 
         <template v-if="deletableTasks.length">
@@ -34,18 +33,17 @@
         </template>
       </div>
       <div class="container">
+        <!-- tasks -->
 
-          <!-- tasks -->
-
-          <div v-for="(task, index) in tasks" :key="index">
-            <task
-              v-if="!deletableTasks.includes(task.id)"
-              @edit="editTask"
-              @delete="deleteTask"
-              :item="task"
-              :index="index"
-            />
-          </div>
+        <div v-for="(task, index) in tasks" :key="index">
+          <task
+            v-if="!deletableTasks.includes(task.id)"
+            @edit="editTask"
+            @delete="deleteTask"
+            :item="task"
+            :index="index"
+          />
+        </div>
       </div>
     </div>
     <div class="list--page-nav">
@@ -61,7 +59,7 @@
             <button class="btn text-danger" @click="deletePrompt = true">
               <trash-2-icon />
             </button>
-            <button class="ml-3 btn btn-primary" @click="taskModal=true">
+            <button class="ml-3 btn btn-primary" @click="openModal">
               <plus-icon />
             </button>
           </div>
@@ -79,7 +77,36 @@
             <form-input label="Name" :required="true" v-model="newTask.name" />
           </div>
           <div class="col-sm-12">
-            <form-input label="Due" :required="true" v-model="newTask.due" />
+            <div class="picker-group">
+              <date-picker
+                @close="datepickerActive = false"
+                :active="datepickerActive"
+                :required="true"
+                v-model="newTask.dueDate"
+              >
+                <input
+                  type="text"
+                  v-model="newTask.dueDate"
+                  placeholder="Date"
+                  class="form-control"
+                  @focus="datepickerActive = true"
+                />
+              </date-picker>
+              <time-picker
+                @close="timepickerActive = false"
+                :active="timepickerActive"
+                :required="true"
+                v-model="newTask.dueTime"
+              >
+                <input
+                  type="text"
+                  v-model="newTask.dueTime"
+                  placeholder="Time"
+                  class="form-control"
+                  @focus="timepickerActive = true"
+                />
+              </time-picker>
+            </div>
           </div>
         </div>
         <template slot="footer">
@@ -128,7 +155,10 @@ export default {
       },
       deleteTimeout: {},
       deletePrompt: false,
-      deletableTasks: []
+      deletableTasks: [],
+
+      datepickerActive: false,
+      timepickerActive: false
     };
   },
   computed: {
@@ -155,11 +185,11 @@ export default {
     },
     addTask() {
       var t = this.newTask;
-      if (t.name && t.due) {
-        this.newTask.todolist_id = this.id;
-        this.$store.dispatch("createTask", this.newTask);
-        this.taskModal = false;
-        this.newTask = {};
+      if (t.name && t.dueDate && t.dueTime) {
+        t.todolist_id = this.id;
+        t.due = `${t.dueDate} ${t.dueTime}`
+        this.$store.dispatch("createTask", t);
+        this.closeModal()
       }
     },
     editTask(index) {
@@ -167,9 +197,8 @@ export default {
       this.taskModal = true;
     },
     updateTask() {
-      this.taskModal = false;
       this.$store.dispatch("updateTask", this.newTask);
-      this.newTask = {};
+      this.closeModal()
     },
 
     deleteTask(task) {
@@ -178,21 +207,25 @@ export default {
       }
       this.deleteTimeout[task] = setTimeout(() => {
         this.confirmTaskDelete(task);
-      }, 1000);
+      }, 3000);
     },
 
     preventDelete(id) {
-      clearTimeout(this.deleteTimeout[id])
-      var index = this.deletableTasks.indexOf(id)
+      clearTimeout(this.deleteTimeout[id]);
+      var index = this.deletableTasks.indexOf(id);
       this.deletableTasks.splice(index, 1);
     },
 
     confirmTaskDelete(id) {
       console.log("confirmed");
-      var index = this.deletableTasks.indexOf(id)
+      var index = this.deletableTasks.indexOf(id);
       this.deletableTasks.splice(index, 1);
       this.$store.dispatch("deleteTask", id);
+    },
 
+    openModal(){
+      this.taskModal =  true
+      this.newTask.name = ''
     },
 
     closeModal() {

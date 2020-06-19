@@ -151,6 +151,30 @@ $offset_dist: -100px;
     }
 }
 
+.picker-group{
+    display: flex;
+    >div{
+        flex: 1 1 auto;
+        &:first-child .form-control{
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        &:last-child .form-control{
+            border-left: none;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+        .form-control{
+            &:focus{
+                outline: none;
+                box-shadow: none;
+                background: rgba(black,.03);
+            }
+        }
+    }
+
+}
+
 @keyframes timebar {
     from {
         width: 100%;
