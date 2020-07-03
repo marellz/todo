@@ -63,7 +63,7 @@
       <template v-else>
         <div class="container">
           <div class="d-flex flex-column align-items-center">
-            <img src="@/assets/img/empty.svg" height="100" alt="">
+            <img src="@/assets/img/empty.svg" height="100" alt />
             <h3 class="mt-3">No Lists currently</h3>
             <p class="text-cultured">It's a little boring.</p>
           </div>
@@ -119,8 +119,8 @@ export default {
   methods: {
     newList() {
       var n = this.newListForm;
-      if(!n.bg){
-        n.bg = this.colors[0]
+      if (!n.bg) {
+        n.bg = this.colors[0];
       }
       this.$store.dispatch("newList", { title: n.name, bg: n.bg });
       this.newListForm = {
@@ -130,6 +130,7 @@ export default {
   },
   mounted() {
     this.$store.dispatch("getLists");
+    this.$store.dispatch("getGap");
   }
 };
 </script>

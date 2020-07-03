@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Task;
+use Carbon\Carbon;
 
 class TaskController extends Controller
 {
@@ -11,6 +12,7 @@ class TaskController extends Controller
     public function store(Request $request)
     {
         $task = Task::create($request->all());
+        $task->due = Carbon::createFromFormat('d/m/Y H:i:s', $task->due)->diffForHumans();
         return response()->json(['task'=>$task]);
     }
 

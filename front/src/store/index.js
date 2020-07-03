@@ -9,10 +9,12 @@ export default new Vuex.Store({
   state: {
     lists: [],
     list: {},
+    timegap: 0,
   },
   getters: {
     lists: (state) => state.lists,
-    list: (state) => state.list
+    list: (state) => state.list,
+    timegap: (state) => state.timegap
   },
 
   mutations: {
@@ -63,6 +65,11 @@ export default new Vuex.Store({
       var tasks = state.list.tasks,
         task = tasks.find(task => task.id == id);
       state.list.tasks.splice(tasks.indexOf(task), 1)
+    },
+
+    // utilities
+    setGap(state, gap) {
+      state.timegap = gap
     }
 
   },
@@ -94,7 +101,7 @@ export default new Vuex.Store({
 
 
     // tasks
-    
+
     async createTask({ commit }, task) {
       const response = await axios.post(`${endPoint}/task/new`, task)
       commit('createTask', response.data)
@@ -114,6 +121,14 @@ export default new Vuex.Store({
         commit('deleteTask', id)
       }
     },
+
+
+    // utilities
+    async getGap({ commit }) {
+      var d = new Date()
+      const response = await axios.post(`${endPoint}/time-gap`, { hour: d.getHours() })
+      commit('setGap', response.data.gap)
+    }
 
   },
   modules: {

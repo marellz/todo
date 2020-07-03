@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -18,5 +19,8 @@ Route::prefix('task')->group(function(){
     Route::post('/new','TaskController@store');
     Route::post('/update/{id}','TaskController@update');
     Route::get('/delete/{id}','TaskController@delete');
-
+    
 });
+
+
+Route::post('/time-gap','UtilitiesController@gap');

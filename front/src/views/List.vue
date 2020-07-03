@@ -66,7 +66,7 @@
         </div>
       </div>
     </div>
-    <form @submit.prevent="newTask.id ? updateTask() : addTask()">
+    <form @submit.prevent="newTask.id ? updateTask() : storeTask()">
       <modal
         :title="newTask.id ? 'Edit task' : 'Add new task'"
         :active="taskModal"
@@ -161,6 +161,13 @@ export default {
       timepickerActive: false
     };
   },
+  watch: {
+    list(v) {
+      if (v == "404") {
+        this.$router.push({ name: "home" });
+      }
+    }
+  },
   computed: {
     list() {
       var l = this.$store.getters.list;
@@ -183,13 +190,14 @@ export default {
       this.$store.dispatch("deleteList", this.list);
       this.$router.push({ name: "home" });
     },
-    addTask() {
+    storeTask() {
       var t = this.newTask;
       if (t.name && t.dueDate && t.dueTime) {
         t.todolist_id = this.id;
-        t.due = `${t.dueDate} ${t.dueTime}`
+        t.due = this.formatTime(t.dueDate, t.dueTime);
         this.$store.dispatch("createTask", t);
-        this.closeModal()
+        console.log(t);
+        this.closeModal();
       }
     },
     editTask(index) {
@@ -198,7 +206,7 @@ export default {
     },
     updateTask() {
       this.$store.dispatch("updateTask", this.newTask);
-      this.closeModal()
+      this.closeModal();
     },
 
     deleteTask(task) {
@@ -223,9 +231,41 @@ export default {
       this.$store.dispatch("deleteTask", id);
     },
 
-    openModal(){
-      this.taskModal =  true
-      this.newTask.name = ''
+    openModal() {
+      this.taskModal = true;
+      this.newTask.name = "";
+    },
+
+    formatTime(date, time) {
+
+      var d = date.split("/");
+      for (let i = 0; i < 2; i++) {
+        if(d[i] && d[i].length < 2){
+          d[i] = `0${d[i]}`
+        }
+      }
+      var t_one = time.split(" ");
+      var t_two = t_one[0].split(":");
+      var gap = this.$store.getters.timegap
+      console.log(t_two[0]);
+      
+      
+      t_two[0] = Number(t_two[0]) + gap
+      console.log(t_two[0]);
+      var me = t_one[1];
+      t_two.push("00");
+
+      if (me == "PM") {
+        var h = Number(t_two[0]);
+        t_two[0] = (h += 12).toString();
+      }
+      var t = t_two.join(":");
+     
+      d = d.join("/");
+      var d8 = `${d} ${t}`
+      // console.log(d8);
+      
+      return d8;
     },
 
     closeModal() {
@@ -237,6 +277,7 @@ export default {
   },
   mounted() {
     this.$store.dispatch("getList", this.id);
+    this.$store.dispatch('getGap')
   },
   destroyed() {
     this.$store.commit("clearList");
