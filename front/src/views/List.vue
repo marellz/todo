@@ -247,11 +247,8 @@ export default {
       var t_one = time.split(" ");
       var t_two = t_one[0].split(":");
       var gap = this.$store.getters.timegap
-      console.log(t_two[0]);
-      
       
       t_two[0] = Number(t_two[0]) + gap
-      console.log(t_two[0]);
       var me = t_one[1];
       t_two.push("00");
 
@@ -263,7 +260,6 @@ export default {
      
       d = d.join("/");
       var d8 = `${d} ${t}`
-      // console.log(d8);
       
       return d8;
     },
